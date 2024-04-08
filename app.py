@@ -1,36 +1,34 @@
-from flask import Flask, jsonify, request
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
 tasks = []
 
-@app.route('/tasks', methods=['GET'])
-def get_tasks():
-    return jsonify({'tasks': tasks})
+@app.route('/')
+def index():
+    return render_template('index.html', tasks=tasks)
 
-@app.route('/tasks', methods=['POST'])
+@app.route('/add_task', methods=['POST'])
 def add_task():
-    data = request.get_json()
-    task = data.get('task')
-    tasks.append(task)
-    return jsonify({'message': 'Task added successfully!'})
+    task_content = request.form['content']
+    tasks.append({'content': task_content, 'completed': False})
+    return jsonify({'message': 'Task added successfully'})
 
-@app.route('/tasks/<int:task_id>', methods=['PUT'])
-def complete_task(task_id):
-    if task_id >= 0 and task_id < len(tasks):
-        tasks[task_id] = "[X] " + tasks[task_id]
-        return jsonify({'message': 'Task marked as completed!'})
+@app.route('/mark_complete/<int:task_index>', methods=['PUT'])
+def mark_complete(task_index):
+    if task_index < len(tasks):
+        tasks[task_index]['completed'] = True
+        return jsonify({'message': 'Task marked as completed'})
     else:
-        return jsonify({'error': 'Invalid task index.'}), 400
+        return jsonify({'error': 'Task index out of range'}), 404
 
-@app.route('/tasks/<int:task_id>', methods=['DELETE'])
-def delete_task(task_id):
-    if task_id >= 0 and task_id < len(tasks):
-        del tasks[task_id]
-        return jsonify({'message': 'Task deleted successfully!'})
+@app.route('/delete_task/<int:task_index>', methods=['DELETE'])
+def delete_task(task_index):
+    if task_index < len(tasks):
+        del tasks[task_index]
+        return jsonify({'message': 'Task deleted successfully'})
     else:
-        return jsonify({'error': 'Invalid task index.'}), 400
+        return jsonify({'error': 'Task index out of range'}), 404
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
-

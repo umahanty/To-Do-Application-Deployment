@@ -4,49 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <h1>To-Do App</h1>
-    <input type="text" id="taskInput" placeholder="Enter task">
-    <button onclick="addTask()">Add Task</button>
-    <ul id="taskList"></ul>
-
+    <h1>To-Do List</h1>
+    <form id="addTaskForm">
+        <input type="text" id="taskContent" placeholder="Enter task content">
+        <button type="submit">Add Task</button>
+    </form>
+    <ul id="taskList">
+        {% for task in tasks %}
+            <li class="{% if task.completed %}completed{% endif %}">
+                {{ task.content }}
+                {% if not task.completed %}
+                    <button class="completeButton" data-index="{{ loop.index0 }}">Mark as Completed</button>
+                {% endif %}
+                <button class="deleteButton" data-index="{{ loop.index0 }}">Delete</button>
+            </li>
+        {% endfor %}
+    </ul>
     <script>
-        function addTask() {
-            var taskInput = document.getElementById("taskInput");
-            var task = taskInput.value;
-            taskInput.value = "";
-
-            fetch('/tasks', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ task: task })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                getTasks();
-            });
-        }
-
-        function getTasks() {
-            fetch('/tasks')
-            .then(response => response.json())
-            .then(data => {
-                var taskList = document.getElementById("taskList");
-                taskList.innerHTML = "";
-                data.tasks.forEach(function(task, index) {
-                    var listItem = document.createElement("li");
-                    listItem.textContent = task;
-                    taskList.appendChild(listItem);
+        $(document).ready(function() {
+            $('#addTaskForm').submit(function(event) {
+                event.preventDefault();
+                var taskContent = $('#taskContent').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/add_task',
+                    data: { content: taskContent },
+                    success: function(response) {
+                        location.reload();
+                    }
                 });
             });
-        }
 
-        getTasks();
+            $('.completeButton').click(function() {
+                var taskIndex = $(this).data('index');
+                $.ajax({
+                    type: 'PUT',
+                    url: '/mark_complete/' + taskIndex,
+                    success: function(response) {
+                        location.reload();
+                    }
+                });
+            });
+
+            $('.deleteButton').click(function() {
+                var taskIndex = $(this).data('index');
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/delete_task/' + taskIndex,
+                    success: function(response) {
+                        location.reload();
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
-
