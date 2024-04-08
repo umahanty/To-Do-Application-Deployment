@@ -1,30 +1,31 @@
-<!-- index.html (Frontend) -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to styles.css -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <h1>To-Do List</h1>
-    <form id="addTaskForm">
-        <input type="text" id="taskContent" placeholder="Enter task content">
-        <button type="submit">Add Task</button>
-    </form>
-    <ul id="taskList">
-        {% for task in tasks %}
-            <li class="{% if task.completed %}completed{% endif %}" data-index="{{ loop.index0 }}">
-                <span class="taskContent">{{ task.content }}</span>
-                {% if not task.completed %}
-                    <button class="completeButton">Mark as Completed</button>
-                {% endif %}
-                <button class="deleteButton">Delete</button>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <form id="addTaskForm">
+            <input type="text" id="taskContent" placeholder="Enter task content">
+            <button type="submit">Add Task</button>
+        </form>
+        <ul id="taskList">
+            {% for task in tasks %}
+                <li class="{% if task.completed %}completed{% endif %}" data-index="{{ loop.index0 }}">
+                    <span class="taskContent">{{ task.content }}</span>
+                    {% if not task.completed %}
+                        <button class="completeButton">Mark as Completed</button>
+                    {% endif %}
+                    <button class="deleteButton">Delete</button>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
     <script>
         $(document).ready(function() {
             $('#addTaskForm').submit(function(event) {
