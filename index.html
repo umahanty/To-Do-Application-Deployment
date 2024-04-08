@@ -1,9 +1,11 @@
+<!-- index.html (Frontend) -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do App</title>
+    <title>To-Do List</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
@@ -14,12 +16,12 @@
     </form>
     <ul id="taskList">
         {% for task in tasks %}
-            <li class="{% if task.completed %}completed{% endif %}">
-                {{ task.content }}
+            <li class="{% if task.completed %}completed{% endif %}" data-index="{{ loop.index0 }}">
+                <span class="taskContent">{{ task.content }}</span>
                 {% if not task.completed %}
-                    <button class="completeButton" data-index="{{ loop.index0 }}">Mark as Completed</button>
+                    <button class="completeButton">Mark as Completed</button>
                 {% endif %}
-                <button class="deleteButton" data-index="{{ loop.index0 }}">Delete</button>
+                <button class="deleteButton">Delete</button>
             </li>
         {% endfor %}
     </ul>
@@ -38,8 +40,8 @@
                 });
             });
 
-            $('.completeButton').click(function() {
-                var taskIndex = $(this).data('index');
+            $(document).on('click', '.completeButton', function() {
+                var taskIndex = $(this).closest('li').data('index');
                 $.ajax({
                     type: 'PUT',
                     url: '/mark_complete/' + taskIndex,
@@ -49,8 +51,8 @@
                 });
             });
 
-            $('.deleteButton').click(function() {
-                var taskIndex = $(this).data('index');
+            $(document).on('click', '.deleteButton', function() {
+                var taskIndex = $(this).closest('li').data('index');
                 $.ajax({
                     type: 'DELETE',
                     url: '/delete_task/' + taskIndex,
@@ -63,3 +65,4 @@
     </script>
 </body>
 </html>
+
