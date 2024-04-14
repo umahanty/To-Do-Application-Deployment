@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+    
+    stages{
+        stage("Code Checkout"){
+            steps {
+                echo "cloning the code"
+                git url:"https://github.com/umahanty/To-Do-Application-Deployment.git", branch: "main"
+            }
+            
+        }
+        
+        stage("build docker image"){
+            steps {
+                echo "Bulding the image"
+                sh "docker build -t flask-app ."
+            }
+            
+        }
+        
+        stage("Push To Docker Hub"){
+            steps {
+                echo "pushing to docker hub"
+                withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
+                sh "docker tag flask-app ${env.dockerHubUser}/flask-app:latest"
+                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                sh "docker push ${env.dockerHubUser}/flask-app:latest"
+                }
+                
+            }
+            
+        }
+        
+        stage("Deploy"){
+            steps {
+                echo "deploy to container"
+                sh "docker run -d -p 5000:5000 umahanty/flask-app:latest"
+                
+            }
+            
+        }
+        
+    }
+    
+    
+}
