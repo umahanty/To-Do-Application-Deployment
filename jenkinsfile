@@ -1,4 +1,4 @@
-pipeline {
+ipipeline {
     agent any
     
     stages{
@@ -34,7 +34,7 @@ pipeline {
         stage("Deploy"){
             steps {
                 echo "deploy to container"
-                sh "docker run -d -p 5000:5000 umahanty/flask-app:latest"
+                ansiblePlaybook become: true, credentialsId: 'ansiblePassword', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'playbook.yml', vaultTmpPath: ''
                 
             }
             
