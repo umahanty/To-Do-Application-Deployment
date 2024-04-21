@@ -11,7 +11,7 @@ class TestFlaskApp(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Chrome(options=options)
         self.driver.implicitly_wait(10)
-        self.driver.get("http://3.7.45.212:5000/")
+        self.driver.get("http://localhost:5000/")
 
     def tearDown(self):
         self.driver.quit()
