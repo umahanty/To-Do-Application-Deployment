@@ -1,5 +1,4 @@
-# Use a small base image like Alpine Linux
-FROM python:3.9-alpine AS build-stage
+FROM python:3.10.12-alpine AS build-stage
 
 # Set environment variables for Flask
 ENV FLASK_APP=app.py
