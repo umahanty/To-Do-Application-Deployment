@@ -43,8 +43,8 @@ pipeline {
         stage("Selenium Test") {
             steps {
                 echo "Running Selenium tests"
-                sh "python3 -m pip install selenium"
-                sh "python selenium1.py"
+		sh 'python3 app.py'
+                sh 'python3 -m pytest'
                 }
             }
 
