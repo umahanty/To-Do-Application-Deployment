@@ -14,17 +14,7 @@ WORKDIR /app
 # Copy only requirements file to the container
 COPY requirements.txt .
 
-# Install any dependencies within a virtual environment
-RUN python -m venv /venv && \
-    /venv/bin/pip install --no-cache-dir -r requirements.txt
-
-# Start a new stage to create a smaller final image
-FROM python:3.9-alpine AS production-stage
-
-# Copy the virtual environment from the build stage
-COPY --from=build-stage /venv /venv
-
-# Set the working directory in the container
+ Set the working directory in the container
 WORKDIR /app
 
 # Copy the application code into the container
@@ -38,10 +28,3 @@ EXPOSE 5000
 
 # Command to run the application
 CMD ["flask", "run", "--host=0.0.0.0"]
-
-# Metadata indicating an image for production use
-LABEL stage=production
-
-# Remove all previous cache of all Docker images
-RUN docker system prune -a --force
-
