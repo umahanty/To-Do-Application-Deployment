@@ -28,3 +28,5 @@ EXPOSE 5000
 
 # Command to run the application
 CMD ["flask", "run", "--host=0.0.0.0"]
+
+USER umahanty
