@@ -1,32 +1,26 @@
-FROM python:3.10.12-alpine AS build-stage
-
-# Set environment variables for Flask
-ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=5000
-
-# Install build dependencies
-RUN apk --no-cache add build-base libffi-dev openssl-dev
+# Use an official Python runtime as the base image
+FROM python:3.10-slim
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy only requirements file to the container
-COPY requirements.txt .
+# Copy the Flask application code into the container
+COPY . /app
 
- Set the working directory in the container
-WORKDIR /app
+# Install any dependencies required by your Flask application
+RUN pip install --no-cache-dir -r requirements.txt
+RUN apk --no-cache add build-base libffi-dev openssl-dev
+RUN pip install pytest
+RUN pip install selenium
 
-# Copy the application code into the container
-COPY . .
-
-# Update PATH environment variable to include virtual environment
-ENV PATH="/venv/bin:$PATH"
-
-# Expose the port the app runs on
+# Expose the port on which your Flask application will run
 EXPOSE 5000
 
-# Command to run the application
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Set the environment variables
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_RUN_PORT=5000
 
-USER umahanty
+# Command to run the Flask application
+CMD ["flask", "run"]
+
