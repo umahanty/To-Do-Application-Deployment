@@ -9,7 +9,7 @@ COPY . /app
 
 # Install any dependencies required by your Flask application
 RUN pip install --no-cache-dir -r requirements.txt
-RUN apk --no-cache add build-base libffi-dev openssl-dev
+RUN apt-get update && apt-get install -y build-essential libffi-dev libssl-dev
 RUN pip install pytest
 RUN pip install selenium
 

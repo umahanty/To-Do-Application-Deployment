@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     stages {
         stage("Code Checkout") {
             steps {
@@ -8,7 +8,7 @@ pipeline {
                 git url: "https://github.com/umahanty/To-Do-Application-Deployment.git", branch: "main"
             }
         }
-        
+
         stage("Build Docker Image") {
             steps {
                 echo "Building the image"
@@ -17,23 +17,23 @@ pipeline {
                 }
             }
         }
-        
+
         stage("Push To Docker Hub") {
             steps {
                 echo "pushing to docker hub"
                 withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                sh "docker tag flask-app ${env.dockerHubUser}/flask-app:latest"
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker push ${env.dockerHubUser}/flask-app:latest"
-                    }
+                    sh "docker tag flask-app ${env.dockerHubUser}/flask-app:latest"
+                    sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                    sh "docker push ${env.dockerHubUser}/flask-app:latest"
                 }
             }
-        
+        }
+
         stage("Deploy") {
             steps {
                 echo "Deploying to container"
                 catchError(buildResult: 'UNSTABLE') {
-                    sh "docker run -d -p 5000:5000 ${env.dockeridUser}/flask-app:latest"
+                    sh "docker run -d -p 5000:5000 ${env.dockerHubUser}/flask-app:latest"
                     // Add a delay to allow the container to start up completely
                     sleep 30
                 }
@@ -43,11 +43,10 @@ pipeline {
         stage("Selenium Test") {
             steps {
                 echo "Running Selenium tests"
-		sh 'python3 app.py'
+                sh 'python3 app.py'
                 sh 'python3 -m pytest'
-                }
             }
-
-	}
-	
+        }
+    }
 }
+
