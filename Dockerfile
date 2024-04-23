@@ -9,8 +9,11 @@ COPY . /app
 
 # Install any dependencies required by your Flask application
 RUN pip install --no-cache-dir -r requirements.txt
-RUN apt-get update && apt-get install -y build-essential libffi-dev libssl-dev
+RUN apk update && \
+    apk add --no-cache build-base libffi-dev openssl-dev
+
 RUN pip install pytest
+
 RUN pip install selenium
 
 # Expose the port on which your Flask application will run
