@@ -24,7 +24,7 @@ def browser():
 
 def test_todo_app(browser):
     # Navigate to the application URL
-    app_url = "http://44.210.91.172:5000/"
+    app_url = "http://44.201.124.229:5000/"
     browser.get(app_url)
 
     # Find the input field and submit button for adding a task
