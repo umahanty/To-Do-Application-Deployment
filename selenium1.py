@@ -6,21 +6,16 @@ import time
 
 @pytest.fixture(scope="module")
 def browser():
-    # Specify the path to your Chrome WebDriver
-    driver_path = "/usr/local/bin/chromedriver"
     
     # Set Chrome options to start the browser maximized
     options = ChromeOptions()
     options.add_argument("--start-maximized")
     
     # Initialize the Chrome browser with the specified options and WebDriver path
-    browser = Chrome(executable_path=driver_path, options=options)
+    browser = webdriver.Chrome(options=options)
     
     # Return the browser instance
     yield browser
-    
-    # Close the browser after the test completes
-    browser.quit()
 
 def test_todo_app(browser):
     # Navigate to the application URL
@@ -70,4 +65,6 @@ def test_todo_app(browser):
     remaining_tasks = browser.find_elements(By.CLASS_NAME, "taskContent")
     assert len(remaining_tasks) == 0
     print("All tasks deleted.")
+
+    browser.quit()
 
