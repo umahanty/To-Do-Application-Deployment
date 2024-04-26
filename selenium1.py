@@ -10,7 +10,7 @@ def browser():
     driver_path = "/usr/local/bin/chromedriver"
     
     # Set Chrome options to start the browser maximized
-    options = ChromeOptions(options=options)
+    options = ChromeOptions()
     options.add_argument("--start-maximized")
     
     # Initialize the Chrome browser with the specified options and WebDriver path
