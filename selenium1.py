@@ -1,8 +1,6 @@
 import pytest
-from selenium.webdriver import Chrome
-from selenium.webdriver.common.by import By
+from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-import time
 
 @pytest.fixture(scope="module")
 def browser():
