@@ -1,6 +1,7 @@
 pipeline {
     agent any
 
+    stages {
         stage("Code Checkout") {
             steps {
                 echo "Cloning the code"
@@ -12,7 +13,7 @@ pipeline {
             steps {
                 echo "Building the image"
                 catchError(buildResult: 'UNSTABLE') {
-                    sh "docker build -t flask-app ."
+                    sh "docker build -t testflaskappnew ."
                 }
             }
         }
@@ -21,9 +22,9 @@ pipeline {
             steps {
                 echo "Deploying to container"
                 catchError(buildResult: 'UNSTABLE') {
-                    sh "docker run -d -p 5000:5000 flask-app"
+                    sh "docker run -d -p 5000:5000 testflaskappnew"
                     // Add a delay to allow the container to start up completely
-                    sleep 20
+                    sleep 30
                 }
             }
         }
@@ -31,7 +32,9 @@ pipeline {
         stage("Selenium Test") {
             steps {
                 echo "Running Selenium tests"
-                sh 'pytest selenium1.py'
+               // sh 'python3 app.py'
+               // sh 'python3 -m pytest'
+                  sh 'pytest selenium1.py'
             }
         }
     }
