@@ -1,14 +1,6 @@
 pipeline {
     agent any
 
-    stages {
-        stage("Install Dependencies") {
-            steps {
-                echo "Installing dependencies"
-                sh "pip install pytest selenium"
-            }
-        }
-
         stage("Code Checkout") {
             steps {
                 echo "Cloning the code"
