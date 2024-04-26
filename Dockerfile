@@ -1,29 +1,27 @@
-# Use an official Python runtime as the base image
-FROM python:3.10-alpine
+# Use a smaller base image like python:3.9-alpine
+FROM python:3.9-alpine AS build-stage
 
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy the Flask application code into the container
-COPY . /app
-
-# Install any dependencies required by your Flask application
-RUN pip install --no-cache-dir -r requirements.txt
-RUN apk update && \
-    apk add --no-cache build-base libffi-dev openssl-dev
-
-RUN pip install pytest
-
-RUN pip install selenium
-
-# Expose the port on which your Flask application will run
-EXPOSE 5000
-
-# Set the environment variables
+# Set environment variables for Flask
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=5000
 
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the requirements file into the container at /app
+COPY requirements.txt .
+
+# Install Flask and other dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the current directory contents into the container at /app
+COPY . .
+
+# Expose port 5000 to the outside world
+EXPOSE 5000
+
 # Command to run the Flask application
-CMD ["flask", "run"]
+CMD ["python", "app.py"]
 
