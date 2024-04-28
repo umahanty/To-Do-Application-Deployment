@@ -32,9 +32,7 @@ pipeline {
         stage("Selenium Test") {
             steps {
                 echo "Running Selenium tests"
-               // sh 'python3 app.py'
-               // sh 'python3 -m pytest'
-                  sh 'pytest selenium1.py'
+                  sh 'python3 selenium1.py'
             }
         }
     }
