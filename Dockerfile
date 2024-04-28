@@ -8,6 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Install any dependencies required by your Flask application
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 RUN apk update && \
     apk add --no-cache build-base libffi-dev openssl-dev
