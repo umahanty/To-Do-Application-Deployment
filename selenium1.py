@@ -7,7 +7,7 @@ import time
 
 # Set Chrome options for headless mode
 chrome_options = Options()
-chrome_options.add_argument("--headless")
+#chrome_options.add_argument("")
 
 # Initialize Chrome WebDriver with options
 #driver = webdriver.Chrome(options=chrome_options)
@@ -16,7 +16,7 @@ class TestFlaskApp(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.implicitly_wait(10)
-        self.driver.get("http://3.87.152.206:5000/")
+        self.driver.get("http://54.221.182.47:5000/")
 
     def tearDown(self):
         self.driver.quit()
